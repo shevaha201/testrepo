@@ -1,1 +1,2 @@
 Info about task
+Client 2 finished his work
