@@ -34,12 +34,17 @@ namespace MapOfTheCity {
 			return base.ToString() + string.Format($"{ContactInfo} \t {Schedule} \t {Rating}");
 		}
 
+		// Не дуже гарна назва. Краще було б назвати EmptyIfNull або шось цього типу
+		// Можна написати як метод розширення і використовувати так
+		// string s = null;
+		// string s1 = s.EmptyIfNull();
 		private string IsStringDataNotNull(string value) {
 			if (value != null) {
 				return value;
 			} else {
 				return "";
 			}
+			// Можна ще так return value ?? string.Empty;
 		}
 	}
 }

@@ -10,12 +10,14 @@ namespace MapOfTheCity {
 			: base(name, latitude, longitude) {
 		}
 
+		// Краще такий метод створити в класі MapOfCity. В даному випадку поточний клас вже прив'язаний до класу PlaceToEat
+		// Але це вже таке
 		public PlaceToEat GetNearestPlaceToEat(MapOfCity map) {
 			return map.Places
-				 .Where(t => t is PlaceToEat)
-				 .Select(t => (PlaceToEat)t)
-				 .OrderByDescending(t => t.GetDistance(this))
-				 .First();
+				.Where(t => t is PlaceToEat)
+				.Select(t => (PlaceToEat)t)
+				.OrderByDescending(t => t.GetDistance(this))
+				.First(); // Better use method FirstOrDefault(). Map can contain no elements PlaceToEat
 		}
 	}
 }

@@ -49,9 +49,9 @@ namespace MapOfTheCity {
 							break;
 						case '6':
 							List<PlaceToEat> placesToEat = mapOfCity.Places
-																		.Where(t => t is PlaceToEat)
-																		.Select(t => (PlaceToEat)t)
-																		.ToList();
+								.Where(t => t is PlaceToEat)
+								.Select(t => (PlaceToEat)t)
+								.ToList();
 							if (!IsEmpty(placesToEat))
 								DisplayNearestPlaceToEat(mapOfCity);
 							break;
@@ -87,29 +87,47 @@ namespace MapOfTheCity {
 			map.Places.Add(new PlaceToEat("Pizza Monopoli", 48.291390, 25.934254, "099 339-33-93", "11:00 - 23:00", 4.2f));
 			map.Places.Add(new PlaceToEat("Veranda", 48.291390, 25.934254, "099 339-33-93", null, 3.9f));
 		}
+
+		// Метод корисний, але вартувало б стоврити статичний клас з такими допоміжними методами
 		public static bool IsEmpty<T>(List<T> list) {
 			if (list.Count() > 0) {
 				return false;
 			} else {
 				return true;
 			}
+			// Можна ще так return list.Count() == 0;
 		}
+		// Гарніший виклик би був, якщо зробити як метод розширення
+		// Треба створити окремий файл для цього класу
+		//public static class ListExtensions {
+
+		//	public static bool IsEmpty<T>(this List<T> list) {
+		//		return list.Count() == 0;
+		//	}
+		//}
+		// Тоді так можна використовувати
+		// List<Place> list = new List<Place>();
+		// list.IsEmpty();
+
+		// OKAY
 		public static void DisplayPlaces<T>(List<T> places) {
 			for (int i = 0; i < places.Count(); i++) {
 				Console.WriteLine($"{i + 1}. {places[i].ToString()}");
 			}
 		}
 
+		// Краще такий метод мати в карті
 		public static List<IRatingable> GetPlacesWithRating(MapOfCity map) {
 			return map.Places
-					.Where(t => t is HistoricalMonument || t is PlaceToEat)
+					.Where(t => t is HistoricalMonument || t is PlaceToEat) // Краще перевіряти чи t is IRatingable. Тоді якщо в майбутньому появиться новий клас з рейтингом - тут не потрібно нічого міняти
 					.Select(t => (IRatingable)t)
 					.ToList();
 		}
 
+		// В той самий клас закинути, що й IsEmpty()
 		public static int IsIndexCorrect(int index, int placesCount) {
 			bool isIndexCorrect = false;
-
+			
 			while (!isIndexCorrect) {
 				if (index >= 0 && index < placesCount) {
 					isIndexCorrect = true;
@@ -121,6 +139,8 @@ namespace MapOfTheCity {
 
 			return index;
 		}
+
+		// OKAY
 		public static void CalculateDistanceBetweenTwoPlaces(MapOfCity map) {
 			Console.Write("\nEnter number of first place: ");
 			int idOfFirstPlace = int.Parse(Console.ReadLine()) - 1;
@@ -134,21 +154,23 @@ namespace MapOfTheCity {
 			Console.WriteLine($"\nDistance from {map.Places[idOfFirstPlace].Name} to {map.Places[idOfSecondPlace].Name} equals {distance}");
 		}
 
+		// Краще в класі MapOfCity написати метод який повертає відсортовані місця, а тут їх просто виводити
 		public static void DisplaySortedListOfPlacesByrating(List<IRatingable> places) {
 			Console.WriteLine("\nSorted list of places by rating:");
 
 			List<IRatingable> sortedPlaces = places
-												.OrderByDescending(t => t.Rating)
-												.ToList();
+				.OrderByDescending(t => t.Rating)
+				.ToList();
 
 			DisplayPlaces<IRatingable>(sortedPlaces);
 		}
 
 		public static void DisplayCoordinatesOfMostPopularPlace(MapOfCity map, List<IRatingable> places) {
 			Console.Write("The most popular place: ");
-			map.GetMostPopularPlace(places);
+			map.GetMostPopularPlace(places); // Комент в цьому методі
 		}
 
+		// Якщо б в карті бу метод, який повертає місця з рейтинго, не потрібно б було передавати сюди другий параметр.
 		public static void SetNewRating(MapOfCity map, List<IRatingable> places) {
 			DisplayPlaces<IRatingable>(places);
 
@@ -165,10 +187,11 @@ namespace MapOfTheCity {
 		}
 
 		public static void DisplayNearestPlaceToEat(MapOfCity map) {
+			// Краще в карті мати метод який поверне публічні місця, а тут працювати з результатом цього методу
 			List<PublicPlace> publicPlaces = map.Places
-													.Where(t => t is PublicPlace)
-													.Select(t => (PublicPlace)t)
-													.ToList();
+				.Where(t => t is PublicPlace)
+				.Select(t => (PublicPlace)t)
+				.ToList();
 			DisplayPlaces<PublicPlace>(publicPlaces);
 
 			Console.Write("Enter number of your place: ");

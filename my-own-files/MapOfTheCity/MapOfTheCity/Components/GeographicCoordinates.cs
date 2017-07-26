@@ -1,8 +1,13 @@
 ﻿using System;
 
 namespace MapOfTheCity {
+
+	// OKAY
 	public class GeographicCoordinates {
 
+		// Легше було б працювати з x та y.
+		// Мені здається, що для відстань між двома такими точками мала б шукатись за іншою формулою.
+		// Але це більш алгоритмічне питання. В цій задачі важливіше саме ООП
 		private double _latitude; //Широта
 		private double _longitude; //довгота
 

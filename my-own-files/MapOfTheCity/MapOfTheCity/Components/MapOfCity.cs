@@ -11,6 +11,10 @@ namespace MapOfTheCity {
 			Places = new List<Place>();
 		}
 
+		// Краще не передавати сюди нічого, оскільки в тебе в класі є колекція місць, просто вибирати з них ті, які мають рейтинг
+		// Також краще не виводити результат в цьому методі. Нехай метод повертає об'єкт типу Place,
+		// а той хто буде викликати цей меод вже собі вирішить що робити з результатом і куди його виводити.
+		// Тому що можливо буде потреба зберегти таке місце в файл, прийдеться писати нови метод
 		public void GetMostPopularPlace(List<IRatingable> places) {
 			Place mostPopularPlace = places
 				.OrderByDescending(t => t.Rating)
@@ -21,6 +25,10 @@ namespace MapOfTheCity {
 		}
 
 		public void SetRating(IRatingable place, float newRating) {
+			// Тут place завжди IRatingable, тому що тип параметру такий.
+			// Тобто ця перевірка завжди буде повертати true і немає сенсу щось перевіряти.
+			// Також ти просто навсього не зможеш передати сюди об'єкт класу, який не реалізовує цей інтерфейс.
+			// Тобто цей метод безпечний по відношенню до типу
 			if (place is IRatingable)
 				place.Rating = newRating;
 			else
